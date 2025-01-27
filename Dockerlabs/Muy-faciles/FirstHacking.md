@@ -80,7 +80,9 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 15.73 seconds
 
 ```
-Ahora que sabemos que tiene este servicio con la versión 2.3.4 buscaremos si existe algun tipo de vulnerabilidad para poder entrar por este puerto.
+Ahora que sabemos que tiene este servicio con la versión 2.3.4 buscaremos si existe algun tipo de vulnerabilidad para poder entrar por este puerto.Al buscar en google, dentro de la base de datos de [Exploit-DB](https://www.exploit-db.com/)
 
 
+
+![image](https://github.com/user-attachments/assets/6a05a67c-183d-46d9-863e-2641f088831c)
 
