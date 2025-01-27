@@ -3,12 +3,17 @@
 
 > Fecha de creación del Write-up 27/01/2025
 
+# TODO LO QUE SE REALIZA EN ESTE DOCUMENTO ES CON FINES EDUCATIVOS,NO ME HAGO RESPOSABLE DEL USO INDEBIDO DE ESTA INFORMACIÓN
+
+
+
 ## Índice
 1. [Descripción](#Descripción)
 2. [Herrmientas](#Herrmainetas)
 3. [Instalación](#Instalación)
 4. [Proceso_de_explotación](#Proceso_de_explotación)
-5. [Webgrafia](#Webgrafia)
+5. [Proceso_de_explotación_Optativo](#Proceso_de_explotación_Optativo)
+6. [Webgrafia](#Webgrafia)
 
 ## Descripción
 
@@ -279,7 +284,6 @@ passwd: password updated successfully
   
 ```
 Con todo esto se da por acabado el objetivo principal de la máquina.
-
 
 
 
