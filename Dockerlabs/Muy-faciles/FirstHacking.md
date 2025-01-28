@@ -1,35 +1,33 @@
 # Write-up Firsthacking
-> Maquina de El pingüino de Mario-Fecha de creación: 14/06/2024
+> Maquina de El pingüino de Mario-Fecha de creación: 14/06/2024 https://dockerlabs.es/
 
 > Fecha de creación del Write-up 27/01/2025
 
-# TODO LO QUE SE REALIZA EN ESTE DOCUMENTO ES CON FINES EDUCATIVOS,NO ME HAGO RESPOSABLE DEL USO INDEBIDO DE ESTA INFORMACIÓN
+# TODO LO QUE SE REALIZA EN ESTE DOCUMENTO ES CON FINES EDUCATIVOS, NO ME HAGO RESNPOSABLE DEL USO INDEBIDO DE ESTA INFORMACIÓN
 
 
 
 ## Índice
 1. [Descripción](#Descripción)
-2. [Herrmientas](#Herrmainetas)
+2. [Herramientas](#Herramaientas)
 3. [Instalación](#Instalación)
 4. [Proceso_de_explotación](#Proceso_de_explotación)
-5. [Proceso_de_explotación_Optativo](#Proceso_de_explotación_Optativo)
-6. [Webgrafia](#Webgrafia)
 
 ## Descripción
 
-Durante todo el proceso del **Write-up** se demostrara con las diferentes herramientas como se puede llegar a entrar al modo **root** y poder dar por acabada la prueba de intrusión
+Durante todo el proceso del **Write-up** se demostrará con las diferentes herramientas cómo se puede llegar a entrar al modo **root** y poder dar por acabada la prueba de intrusión
 
 ## Herramientas
 
 | Herramientas     | Descripción                       | Versión    |
 |------------------|-----------------------------------|-----------|
-|**Nmap**| Permite descubrir Dispositivos en la red,servicios,puertos...           | ✅ Listo  |
-| **Metasploit**   | Permite a traves de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan      | 🔄 En progreso |
-| **Ftp**| Enviar alertas al usuario        | ❌ Pendiente |
+|**Nmap**| Permite descubrir dispositivos en la red,servicios,puertos...           | ✅ Listo  |
+| **Metasploit**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan      | 🔄 En progreso |
+| **Ftp**| Conectarse al servicio de ftp de la máquina      | ❌ Pendiente |
 
 ## Instalación
 
-Antes de empezar deberemos de desplegar la maquina vulnerable para que este disponible durante todo el proceso de intrusión
+Antes de empezar deberemos desplegar la máquina vulnerable para que esté disponible durante todo el proceso de intrusión
 ```bash
 
 #Le damos permisos de ejecución
@@ -51,15 +49,15 @@ Presiona Ctrl+C cuando termines con la máquina para eliminarla
 ```
 ## Proceso_de_explotación
 
-Ahora que la maquina ya esta disponible, pasaremos a comprobar que servicios y puertos tiene abiertos a la red.
+Ahora que la máquina ya esta disponible, pasaremos a comprobar qué servicios y puertos tiene abiertos a la red.
 
 ```bash
-#Deberemos de utilizar la herramienta Nmap con el parametro -A para que compruebe puertos,servicios,scripts...
+#Deberemos de utilizar la herramienta Nmap con el parámetro -A para que compruebe puertos,servicios,scripts...
 
 ──(alema㉿alema)-[~]
 └─$ sudo nmap -A 172.17.0.2 >Prueba_de_IP
 
-#Al  ver el resultado del Nmap podemos ver que tiene el puerto 21 con el servicio de vsftpd y version de 2.3.4
+#Al  ver el resultado del Nmap, podemos ver que tiene el puerto 21 con el servicio de vsftpd y version de 2.3.4
                                                                          
 ┌──(alema㉿alema)-[~]
 └─$ cat Prueba_de_IP 
@@ -85,7 +83,7 @@ OS and Service detection performed. Please report any incorrect results at https
 Nmap done: 1 IP address (1 host up) scanned in 15.73 seconds
 
 ```
-Ahora que sabemos que tiene este servicio con la versión 2.3.4 buscaremos si existe algun tipo de vulnerabilidad para poder entrar por este puerto.Al buscar en google, dentro de la base de datos de [Exploit-DB](https://www.exploit-db.com/)
+Ahora que sabemos que tiene este servicio con la versión 2.3.4 buscaremos si existe algún tipo de vulnerabilidad para poder entrar por este puerto.Al buscar en Google, dentro de la base de datos de [Exploit-DB](https://www.exploit-db.com/)
 
 
 
@@ -267,7 +265,7 @@ SPEED
 TODO
 (Entre otros directorios)   
 ```
-Ahora que estamos dentro de la maquina podriamos comprobar si estamos como usuario administrador
+Ahora que estamos dentro de la maquina podríamos comprobar si estamos como usuario administrador
 
 ```bash
 
@@ -275,7 +273,7 @@ Ahora que estamos dentro de la maquina podriamos comprobar si estamos como usuar
 pwd
 /root/vsftpd-2.3.4
 
-#De forma optativa podriamos cambiar si queremos la contraseña de root
+#De forma optativa podríamos cambiar, si queremos, la contraseña de root
 
 passwd
 New password: alema
