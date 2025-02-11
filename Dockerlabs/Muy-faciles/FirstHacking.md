@@ -23,8 +23,7 @@ Durante todo el proceso del **Write-up** se demostrará con las diferentes herra
 |------------------|-----------------------------------|-----------|
 |**Nmap**| Permite descubrir dispositivos en la red,servicios,puertos...           | 7.94SVN  |
 | **Metasploit**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan      | 6.4.34-dev|
-| **Ftp**| Conectarse al servicio de ftp de la máquina      | 20230507-2+b1
- |
+| **Ftp**| Conectarse al servicio de ftp de la máquina      | 20230507-2+b1|
 
 ## Instalación
 
