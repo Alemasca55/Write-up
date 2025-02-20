@@ -170,7 +170,7 @@ ftp> exit
 └─$ cat chat-gonza.txt
 [16:21, 16/6/2024] Gonza: pero en serio es tan guapa esa tal Nágore como dices?
 [16:28, 16/6/2024] Russoski: es una auténtica princesa pff, le he hecho hasta un vídeo y todo, lo tengo ya subido y tengo la URL guardada
-[16:29, 16/6/2024] Russoski: 'en mi ordenador en una ruta segura', ahora cuando quedemos te lo muestro si quieres
+[16:29, 16/6/2024] Russoski: en mi ordenador en una ruta segura, ahora cuando quedemos te lo muestro si quieres
 [21:52, 16/6/2024] Gonza: buah la verdad tenías razón eh, es hermosa esa chica, del 9 no baja
 [21:53, 16/6/2024] Gonza: por cierto buen entreno el de hoy en el gym, noto los brazos bastante hinchados, así sí
 [22:36, 16/6/2024] Russoski: te lo dije, ya sabes que yo tengo buenos gustos para estas cosas xD, y sí buen training hoy
@@ -183,8 +183,8 @@ ftp> exit
 
 3 Terminar mi laboratorio vulnerable para la plataforma Dockerlabs!
 
-'4 Cambiar algunas configuraciones de mi equipo, creo que tengo ciertos
-  permisos habilitados que no son del todo seguros..'
+4 Cambiar algunas configuraciones de mi equipo, creo que tengo ciertos
+  permisos habilitados que no son del todo seguros...
 
 ```
 #Una vez hemos revisado el servicio ftp,vamos a revisar el contenido que tiene por el puerto 80.
@@ -192,10 +192,9 @@ ftp> exit
 ![image](https://github.com/user-attachments/assets/e70bc3fc-cb0b-4303-a204-c1bd9e22fe4e)
 
 
-Como podemos ver hay una pagína web con contenido,para poder comprobar si tiene algún tipo de archivo desprotrgido,algun subdominio o alguna pista que nos sea útil utilizaremos el siguiente comando:
+Como podemos ver hay una pagína web con contenido,para poder comprobar si tiene algún tipo de archivo desprotregido,algun subdominio o alguna pista que nos sea útil utilizaremos el siguiente comando:
 
-```
-  
+```bash  
 ┌──(kali㉿kali)-[~]
 └─$ dirb http://172.17.0.2   
 
@@ -230,6 +229,11 @@ GENERATED WORDS: 4612
 -----------------
 END_TIME: Thu Feb 13 16:05:01 2025
 DOWNLOADED: 4612 - FOUND: 2
+
+```
+#Si revisamos el contenido del comando dirb podemos ver que nos ha listado dos directorios,"backup" y "important".Al comprobar el contenido como indica la herramienta,podemos ver lo siguiente:
+
+##En el directorio "http://172.17.0.2/important/" 
 
 
 
