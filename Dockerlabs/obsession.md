@@ -163,7 +163,7 @@ ftp> exit
 221 Goodbye.
 
 ````
-#Comprobamos el contenido de los archivos.                                                                                                                                                                                                                                           
+Comprobamos el contenido de los archivos.                                                                                                                                                                                                                                           
 ```bash
 
 ┌──(kali㉿kali)-[~]
@@ -187,12 +187,15 @@ ftp> exit
   permisos habilitados que no son del todo seguros...
 
 ```
-#Una vez hemos revisado el servicio ftp,vamos a revisar el contenido que tiene por el puerto 80.
+Al comprobar el contenido de los ficheros de la victima,podemos saber que tiene un archivo comprometedor y tambíen que tiene algunos permisos elevados.
+
+
+Para continuar con la investigación vamos a revisar los servicios que corren por el puerto 80.Si nos conectamos podemos ver la siguiente página web.
 
 ![image](https://github.com/user-attachments/assets/e70bc3fc-cb0b-4303-a204-c1bd9e22fe4e)
 
 
-Como podemos ver hay una pagína web con contenido,para poder comprobar si tiene algún tipo de archivo desprotregido,algun subdominio o alguna pista que nos sea útil utilizaremos el siguiente comando:
+Ahora que hemos visto la página web,lo que deberiamos hacer es utilizar la herramienta dirb para poder listar todo el contenido que tenga,ya sea subdirectorios,documentos publicos o alguna vulnerabilidad
 
 ```bash  
 ┌──(kali㉿kali)-[~]
@@ -206,6 +209,9 @@ By The Dark Raver
 
 START_TIME: Thu Feb 13 16:04:59 2025
 URL_BASE: http://172.17.0.2/
+
+#Este es el diccionario que se utilizara.
+
 WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
 
 -----------------
@@ -217,7 +223,7 @@ GENERATED WORDS: 4612
 ==> DIRECTORY: http://172.17.0.2/important/                                                                                                                                                                                                
 + http://172.17.0.2/index.html (CODE:200|SIZE:5208)                                                                                                                                                                                        
 + http://172.17.0.2/server-status (CODE:403|SIZE:275)                                                                                                                                                                                      
-                                                                                                                                                                                                                                           
+                                                                                                                                                                                                                      
 ---- Entering directory: http://172.17.0.2/backup/ ----
 (!) WARNING: Directory IS LISTABLE. No need to scan it.                        
     (Use mode '-w' if you want to scan it anyway)
@@ -231,13 +237,23 @@ END_TIME: Thu Feb 13 16:05:01 2025
 DOWNLOADED: 4612 - FOUND: 2
 
 ```
-#Si revisamos el contenido del comando dirb podemos ver que nos ha listado dos directorios,"backup" y "important".Al comprobar el contenido como indica la herramienta,podemos ver lo siguiente:
+Si revisamos el contenido del comando dirb podemos ver que nos ha listado dos directorios,"backup" y "important".Al comprobar el contenido como indica la herramienta,podemos ver lo siguiente:
 
-##En el directorio "http://172.17.0.2/important/" 
+En el directorio "http://172.17.0.2/important/" 
+
+Como se observa, hay un .md  del cual no hay nada destacable de momento.
 
 
 
-Con todo esto se da por acabado el objetivo principal de la máquina.
+![image](https://github.com/user-attachments/assets/a2049884-9de6-4536-9064-897f728c7630)
+
+
+En el directorio "http://172.17.0.2/backup/" 
+
+Aqui dentro hay un txt que indica el usuario por defecto que utiliza la victima para los servicios.
+
+![image](https://github.com/user-attachments/assets/cdd32666-5577-4f0c-b27a-c80b0864a101)
+
 
 
 
