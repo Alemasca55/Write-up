@@ -1,4 +1,4 @@
-# Write-up Obsesion
+# Write-up Obsession
 > Maquina de Dockerlabs https://dockerlabs.es/
 
 > Maquina de Juan-Fecha de creación: 25/06/2024
